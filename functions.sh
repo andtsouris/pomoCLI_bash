@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 print_pbar(){
   # !!! ADD ERROR EXPLANATIONS !!! #
   local title="$1"
@@ -76,7 +77,6 @@ launch_timer2 (){
   local duration="$4"
 
   secs_passed=0
-
   while [ $secs_passed -le $duration ]
   do
     cur_perc=$(echo "scale=2; $secs_passed/$duration" | bc)
@@ -90,25 +90,20 @@ launch_timer2 (){
     if (( $(echo "$counter < 1" | bc -l) )); then
       counter=0
     fi
-    print_pbar ${title} ${msg} ${counter%.*} ${time} ${bar_len} 
+    print_pbar ${title} ${msg} ${counter%.*} ${time} ${bar_len}
     sleep 1
     (( secs_passed=secs_passed+1 ))
   done
-  }
+   afplay assets/$my_sound
+ }
 
 start_timer() {
   clear
   echo -n "Timer duration in seconds: "
   read cur_duration
-  launch_timer2 "Timer" "Timer running." 35 $cur_duration
-  afplay assets/bell.wav
+  launch_timer2 "Timer" "Timer_running" 35 $cur_duration
+
   sleep 1
   clear
   menu
-}
-
-repeat(){
-  cols=$(tput cols)
-  echo "Cols: $cols"
-  for i in {1..$(cols)}; do echo -n "$1"; done
 }
