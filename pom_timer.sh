@@ -166,7 +166,7 @@ Select one of the options above: "
 # Main script
 echo -ne "Welcome to PomodoroCLI! \n"
 sel1='*'; sel2=''; sel3=''; sel4=''; my_sound='bell.mp3'
-work_int=25; s_break=5; l_break=15, reps=4
+work_int=25; s_break=5; l_break=15; reps=4
 menu
 cur_duration=$1
 #launch_timer "Title" "Message" 20 25 ${cur_duration}
