@@ -99,27 +99,39 @@ Work (minutes): "
   clear
 #  for ((i=1; i<=cols; i++)); do printf '=%.0s'; done
 
-  echo "Use Ctrl+c to exit."
   while [ $run -eq 1 ]; do
     if [[ $work -eq 1 ]]; then
       work=0
-      launch_timer2 "Work_session" "No_slacking_allowed!" 30 $(( work_int*60 ))
-      (( work_done=work_done+1))
+      echo -e "Start next interval Y/n:"
+      read proceed; clear
+      if [[ "$proceed" != "n" ]]; then
+        launch_timer2 "Work_session" "No_slacking_allowed!" 30 $(( work_int*60 ))
+      (( work_done=work_done+1 ))
+      fi
+    else
+      exit
     fi
-    (( to_l_break=work_done%reps))
+    (( to_l_break=work_done%reps ))
     if [[ $work -eq 0 ]]; then
       work=1
-      if [[ $to_l_break -eq 0 ]]; then
-        launch_timer2 "Long_break" "Go_get_some_coffee,_you_earned_it" 30 $(( l_break*60 ))
+      echo -e "\nStart next interval Y/n:"
+      read proceed; clear
+      if [[ "$proceed" != "n" ]]; then
+        if [[ $to_l_break -eq 0 ]]; then
+          launch_timer2 "Long_break" "Go_get_some_coffee,_you_earned_it" 30 $(( l_break*60 ))
+        else
+          launch_timer2 "Short_break" "Stretch_out_and_back_to_work." 30 $(( s_break*60 ))
+        fi 
       else
-        launch_timer2 "Short_break" "Stretch_out_and_back_to_work." 30 $(( s_break*60 ))
-      fi 
+        exit
+      fi
+      echo ''
     fi
   done
-
-
-
+  menu
 }
+
+
  docs() {
    clear; clear
    echo "$(ColorGreen '---------- PomodoroCLI documentation ------------')
@@ -166,7 +178,7 @@ Select one of the options above: "
 # Main script
 echo -ne "Welcome to PomodoroCLI! \n"
 sel1='*'; sel2=''; sel3=''; sel4=''; my_sound='bell.mp3'
-work_int=25; s_break=5; l_break=15; reps=4
+work_int=25; s_break=5; l_break=15; rep=4
 menu
 cur_duration=$1
 #launch_timer "Title" "Message" 20 25 ${cur_duration}

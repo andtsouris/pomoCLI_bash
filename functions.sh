@@ -21,6 +21,7 @@ print_pbar(){
   # Calculating the pbar symbols
   (( _hash_num=$current ))
   (( _dash_num=bar_len-_hash_num))
+  (( short_length=_title_blanks+${#title}+2+${#time}+${bar_len}+6 )) 
   if [ $_hash_num -eq 0 ]; then
     hash_string=''
   else
@@ -29,11 +30,13 @@ print_pbar(){
    title_block=$(echo " $title")
 
 # Printing with or without the message depending on the window size
-  if [ $_blank_block -lt 2 ]
-  then
-      printf "\r ${title}%${_title_blanks}s [${hash_string}%${_dash_num}s] ${time}%${_blank_block}s"
+  clear
+  if [ $_blank_block -lt 2 ] && [ $cols -gt $short_length ]; then
+    printf "\r ${title}%${_title_blanks}s [${hash_string}%${_dash_num}s] ${time}%${_blank_block}s"
+  elif [[ $cols -lt $short_length ]]; then
+    printf "\r ${title}%${_title_blanks}s ${time}"
   else
-      printf "\r ${title}%${_title_blanks}s [${hash_string}%${_dash_num}s] ${time}%${_blank_block}s\033[0;34m~ ${msg}\033[0m"
+    printf "\r ${title}%${_title_blanks}s [${hash_string}%${_dash_num}s] ${time}%${_blank_block}s\033[0;34m~ ${msg}\033[0m"
   fi
 }
 
